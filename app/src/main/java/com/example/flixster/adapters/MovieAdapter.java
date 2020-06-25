@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.flixster.R;
+import com.example.flixster.databinding.ItemMovieBinding;
 import com.example.flixster.models.Movie;
 
 import java.util.List;
@@ -30,12 +31,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         this.movies = movies;
     }
 
+    TextView tvTitle;
+    TextView tvOverview;
+    ImageView ivPoster;
+
     //inflates a layout from XML(item_movie) and returning the holder (place layout inside ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("MovieAdapter", "onCreateViewHolder");
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+        //item_movie.xml -> ItemMovieBinding
+        ItemMovieBinding itemMovieBinding = ItemMovieBinding.inflate(LayoutInflater.from(context));
+        View movieView = itemMovieBinding.getRoot(); //LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+
+        tvTitle = itemMovieBinding.tvTitle;
+        tvOverview = itemMovieBinding.tvOverview;
+        ivPoster = itemMovieBinding.ivPoster;
+
         return new ViewHolder(movieView);
     }
 
@@ -58,15 +70,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle;
-        TextView tvOverview;
-        ImageView ivPoster;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvOverview = itemView.findViewById(R.id.tvOverview);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
         }
 
         public void bind(Movie movie) {
@@ -83,8 +88,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             int imgRadius = 30; //corner radius
             int imgMargin = 0; //crop margin
             Glide.with(context).load(imageURL).transform(new RoundedCornersTransformation(imgRadius, imgMargin)).into(ivPoster);
-
-            //Glide.with(context).load(imageURL).into(ivPoster);
 
         }
     }

@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
+    String backdropPath;
     String posterPath;
     String title;
     String overview;
     public Movie(JSONObject jsonObject) throws JSONException {
+        backdropPath = jsonObject.getString("backdrop_path");
         posterPath = jsonObject.getString("poster_path");
         title = jsonObject.getString("title");
         overview = jsonObject.getString("overview");
@@ -29,6 +31,11 @@ public class Movie {
         //want to get full url to render properly
         String baseURL = "https://image.tmdb.org/t/p/w342/%s";
         return String.format(baseURL, posterPath);
+    }
+
+    public String getBackdropPath() {
+        String baseURL = "https://image.tmdb.org/t/p/w342/%s";
+        return String.format(baseURL, backdropPath);
     }
 
     public String getTitle() {

@@ -18,6 +18,8 @@ import com.example.flixster.models.Movie;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     //context to inflate view and position
     Context context;
@@ -78,8 +80,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             } else {
                 imageURL = movie.getPosterPath();
             }
+            int imgRadius = 30; //corner radius
+            int imgMargin = 0; //crop margin
+            Glide.with(context).load(imageURL).transform(new RoundedCornersTransformation(imgRadius, imgMargin)).into(ivPoster);
 
-            Glide.with(context).load(imageURL).into(ivPoster);
+            //Glide.with(context).load(imageURL).into(ivPoster);
+
         }
     }
 }

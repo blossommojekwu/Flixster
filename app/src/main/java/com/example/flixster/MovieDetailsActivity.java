@@ -3,6 +3,7 @@ package com.example.flixster;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.flixster.databinding.ActivityMovieDetailsBinding;
@@ -72,5 +74,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
             dplaceHolder = R.drawable.flicks_movie_placeholder;
         }
         Glide.with(this).load(detailsImg).placeholder(dplaceHolder).transform(new RoundedCornersTransformation(30, 0)).into(detailsPoster);
+        //implement listener that
+        detailsPoster.setOnClickListener(new View.OnClickListener() {
+            private Object MovieTrailerActivity;
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Play Trailer", Toast.LENGTH_SHORT).show();
+                //create an intent that will contain results
+               // Intent intent = new Intent(this, MovieTrailerActivity);
+                //Use an Intent and pass the video id as a String extra
+                //set the result of the intent
+                //setResult(RESULT_OK, intent);
+                //finish activity
+                finish();
+            }
+        });
+
     }
 }

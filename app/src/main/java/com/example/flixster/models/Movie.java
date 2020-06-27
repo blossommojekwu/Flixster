@@ -2,6 +2,8 @@ package com.example.flixster.models;
 
 import android.util.Log;
 
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,15 +11,17 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Parcel // annotation indicates class is Parcelable
 public class Movie {
+    //public static Integer id;
     String backdropPath;
     String posterPath;
     String title;
     String overview;
     Double voteAverage;
-    Integer id;
+    static Integer id;
 
     // no-arg, empty constructor required for Parceler
     public Movie() {}
@@ -37,6 +41,18 @@ public class Movie {
             movies.add(new Movie(movieJsonArray.getJSONObject(i)));
         }
         return movies;
+    }
+
+    public static String movieID(JSONArray movieIDJsonArray) throws JSONException {
+        String youtubeID = "";
+        for (int i = 0; i < movieIDJsonArray.length(); i++) {
+            JSONObject property = movieIDJsonArray.getJSONObject(i);
+            if(!property.isNull("id")) {
+                youtubeID = property.getString("id").toString();
+                break;
+            }
+        }
+        return youtubeID;
     }
 
     public String getPosterPath() {
@@ -62,4 +78,9 @@ public class Movie {
         Log.d("MOVIE", "voteAverage" + voteAverage);
         return voteAverage;
     }
+
+    public static Integer getId() {
+        return id;
+    }
 }
+

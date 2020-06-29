@@ -21,7 +21,7 @@ public class Movie {
     String title;
     String overview;
     Double voteAverage;
-    static Integer id;
+    Integer id;
 
     // no-arg, empty constructor required for Parceler
     public Movie() {}
@@ -32,7 +32,8 @@ public class Movie {
         title = jsonObject.getString("title");
         overview = jsonObject.getString("overview");
         voteAverage = jsonObject.getDouble("vote_average");
-        id = jsonObject.getInt("id");
+        id = Integer.parseInt(String.valueOf(jsonObject.get("id"))); //jsonObject.getInt("id");
+        //System.out.println("IDVAL: " + id);
     }
     public static List<Movie> fromJSONArray(JSONArray movieJsonArray) throws JSONException {
         //iterate through json array and construct a movie for each elem in array
@@ -47,8 +48,8 @@ public class Movie {
         String youtubeID = "";
         for (int i = 0; i < movieIDJsonArray.length(); i++) {
             JSONObject property = movieIDJsonArray.getJSONObject(i);
-            if(!property.isNull("id")) {
-                youtubeID = property.getString("id").toString();
+            if(!property.isNull("key")) {
+                youtubeID = property.getString("key");
                 break;
             }
         }
@@ -79,7 +80,8 @@ public class Movie {
         return voteAverage;
     }
 
-    public static Integer getId() {
+    public Integer getId() {
+        Log.d("MOVIE", "id " + id);
         return id;
     }
 }

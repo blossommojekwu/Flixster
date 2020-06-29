@@ -55,4 +55,16 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <ImageView
+        android:id="@+id/playIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="76dp"
+        android:background="#F31212"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="@+id/detailsPoster"
+        app:layout_constraintTop_toTopOf="@+id/detailsPoster"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

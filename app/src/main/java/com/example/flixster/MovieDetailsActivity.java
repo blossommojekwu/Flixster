@@ -15,12 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.flixster.databinding.ActivityMovieDetailsBinding;
 import com.example.flixster.models.Movie;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import okhttp3.Headers;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -33,6 +39,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
     RatingBar rbVoteAverage;
     ImageView detailsPoster;
 
+    String movieId;
+    String endpointURL;
+    public String MOVIE_TRAILER_URL = "";
+    public static final String TAG = "MovieDetailsActivity";
+    String videoId;
     //retrieve and unwrap the Movie from the Intent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +63,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         //unwrap the movie passed in via intent, using its simple name key
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
-        Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
+        Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle())); //"Showing details for 'Artemis Fowl'
 
         //set the title and overview;
         tvTitle.setText(movie.getTitle());
@@ -74,20 +85,43 @@ public class MovieDetailsActivity extends AppCompatActivity {
             dplaceHolder = R.drawable.flicks_movie_placeholder;
         }
         Glide.with(this).load(detailsImg).placeholder(dplaceHolder).transform(new RoundedCornersTransformation(30, 0)).into(detailsPoster);
+
+        //https://api.themoviedb.org/3/movie/554993/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed&language=en-US
+        movieId = Integer.toString(movie.getId());
+        endpointURL = "https://api.themoviedb.org/3/movie/" + movieId + "/videos?api_key=" + this.getString(R.string.movies_api_key);
+        MOVIE_TRAILER_URL = endpointURL;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(MOVIE_TRAILER_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess");        //log data
+                JSONObject jsonObject= json.jsonObject;
+                try {
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    videoId = Movie.movieID(results);
+                    Log.i(TAG, "videoId: " + videoId); //475430
+                    Log.i(TAG, "Results: " + results.toString()); //[{"popularity":75.882,"vote_count":13,"video":false,"poster_path":"
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception", e);
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure");
+            }
+        });
+
         //implement listener that
         detailsPoster.setOnClickListener(new View.OnClickListener() {
-            private Object MovieTrailerActivity;
-
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Play Trailer", Toast.LENGTH_SHORT).show();
                 //create an intent that will contain results
-               // Intent intent = new Intent(this, MovieTrailerActivity);
+                Intent intent = new Intent(MovieDetailsActivity.this, MovieTrailerActivity.class);
                 //Use an Intent and pass the video id as a String extra
-                //set the result of the intent
-                //setResult(RESULT_OK, intent);
-                //finish activity
-                finish();
+                intent.putExtra("videoId", videoId);
+                startActivity(intent);
             }
         });
 

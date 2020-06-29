@@ -35,7 +35,7 @@ Here's a walkthrough of implemented user stories:
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
-One of the challenges I experiened was getting more knowledge about android syntax. Overall, I grasped a greater understanding of intents, onclickListerner and activity to activity interaction.
+One of the challenges I experiened was getting more knowledge about android syntax. Overall, I grasped a greater understanding of intents, onclickListeners and activity to activity interaction.
 
 ## Open-source libraries used
 
